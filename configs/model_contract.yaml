@@ -1,0 +1,21 @@
+# 模型输入/输出契约
+input:
+  tensors:
+    - name: x_mol
+      shape: [N, d_mol]
+    - name: x_env
+      shape: [N, d_env]
+output:
+  heads:
+    - name: occur_prob
+      desc: 是否发生(T1) 概率
+    - name: center_heatmap
+      desc: 反应中心热图(T2)
+    - name: product_retrieval
+      desc: 候选产物Top-k索引与分数(T3)
+calibration:
+  method: temperature_scaling
+  per_stratum: true
+reject_option:
+  enable: true
+  threshold: 0.5

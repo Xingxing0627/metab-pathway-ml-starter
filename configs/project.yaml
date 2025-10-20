@@ -1,0 +1,15 @@
+project_name: metab-pathway-ml
+seed: 42
+paths:
+  data_root: data
+  raw: data/raw
+  external: data/external
+  interim: data/interim
+  processed: data/processed
+  reports: reports
+contracts:
+  schema: configs/schema_contract.yaml
+  model: configs/model_contract.yaml
+  path: configs/path_contract.yaml
+calibration:
+  strata: configs/calib_strata.yaml

@@ -1,0 +1,19 @@
+name: metab-ml
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - numpy
+  - pandas
+  - scikit-learn
+  - pytorch
+  - cudatoolkit  # 如无GPU可删除
+  - rdkit
+  - pyyaml
+  - tqdm
+  - matplotlib
+  - networkx
+  - pip:
+      - pre-commit
+      - faiss-cpu

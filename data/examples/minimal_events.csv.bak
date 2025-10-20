@@ -1,0 +1,4 @@
+reaction_id,substrate_smiles,enzyme_ec,species,product_smiles,occur_label,center_atom_idx,env_redox_prob,env_ph_bin,temp_c
+R0001,CC(=O)O,1.14.-.-,human,,1,2,"[0.2,0.6,0.2]",3,25.0
+R0002,OC(=O)CCl3,3.1.-.-,microbe,,0,1,"[0.5,0.4,0.1]",2,20.0
+R0003,Clc1ccccc1Cl,1.14.-.-,plant,,1,3,"[0.1,0.7,0.2]",1,28.0

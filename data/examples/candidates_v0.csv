@@ -1,0 +1,4 @@
+product_smiles,name,rule_tag
+O=C(O)C,acetic acid,phaseI_oxidation
+Clc1ccccc1O,chlorophenol,phaseI_hydroxylation
+O=C(O)C(Cl)(Cl)Cl,trichloroacetic acid,phaseI_hydration

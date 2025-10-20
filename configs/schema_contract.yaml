@@ -1,0 +1,47 @@
+# 单步代谢事件数据契约（最小子集示例）
+fields:
+  - name: reaction_id
+    type: string
+    required: true
+  - name: substrate_smiles
+    type: string
+    required: true
+  - name: enzyme_ec
+    type: string
+    required: false
+  - name: species
+    type: string
+    required: false
+  - name: product_smiles
+    type: string
+    required: false
+  - name: occur_label
+    type: int  # 1/0/-1(不确定)
+    required: true
+  - name: center_atom_idx
+    type: int
+    required: false
+  - name: env_redox_prob
+    type: array  # 概率分布，如[0.1,0.7,0.2]
+    required: false
+  - name: env_ph_bin
+    type: int  # 0..N-1
+    required: false
+  - name: temp_c
+    type: float
+    required: false
+rules:
+  - name: prob_norm
+    when: env_redox_prob is present
+    assert: sum(env_redox_prob)≈1
+examples:
+  - reaction_id: R0001
+    substrate_smiles: "CC(=O)O"
+    enzyme_ec: "1.14.-.-"
+    species: "human"
+    product_smiles: ""
+    occur_label: 1
+    center_atom_idx: 2
+    env_redox_prob: [0.2, 0.6, 0.2]
+    env_ph_bin: 3
+    temp_c: 25.0

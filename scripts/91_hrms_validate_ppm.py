@@ -1,0 +1,122 @@
+# -*- coding: utf-8 -*-
+# HRMS validation: exact masses -> adduct m/z -> ppm window match -> hits + BH q-values
+import argparse, json, math
+from pathlib import Path
+import pandas as pd
+from rdkit import Chem
+from rdkit.Chem import Descriptors
+
+def exact_mass(smiles: str) -> float:
+    m = Chem.MolFromSmiles(smiles)
+    if m is None:
+        return float("nan")
+    return float(Descriptors.ExactMolWt(m))
+
+# adduct m/z calculators
+PROTON = 1.007276466812
+NA = 22.989218
+K = 38.963158
+NH4 = 18.033823
+ADDUCTS = {
+    "[M+H]+":   lambda m: (m + PROTON),
+    "[M+Na]+":  lambda m: (m + NA),
+    "[M+K]+":   lambda m: (m + K),
+    "[M+NH4]+": lambda m: (m + NH4),
+    "[M-H]-":   lambda m: (m - PROTON),
+}
+
+def benjamini_hochberg(pvals):
+    n = len(pvals)
+    if n == 0:
+        return []
+    ranked = sorted((p, i) for i, p in enumerate(pvals))
+    q = [0.0] * n
+    mval = 1.0
+    for rank, (p, i) in enumerate(reversed(ranked), start=1):
+        val = min(mval, p * n / (n - rank + 1))
+        mval = val
+        q[i] = val
+    return q
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--tree", required=True)
+    ap.add_argument("--features_csv", required=True, help="csv with columns: mz,intensity")
+    ap.add_argument("--ppm", type=float, default=10.0)
+    ap.add_argument("--adducts", default="[M+H]+,[M+Na]+,[M+K]+,[M+NH4]+,[M-H]-")
+    ap.add_argument("--min_intensity", type=float, default=0.0)
+    ap.add_argument("--out_hits", default="reports/metrics/hrms_hits.csv")
+    ap.add_argument("--out_q", default="reports/metrics/hrms_qvalues.csv")
+    args = ap.parse_args()
+
+    t = json.load(open(args.tree, "r", encoding="utf-8"))
+    smiles_list = t.get("best_path_smiles", [])
+
+    Path(args.out_hits).parent.mkdir(parents=True, exist_ok=True)
+
+    if not smiles_list:
+        pd.DataFrame(columns=["step","smiles","adduct","theo_mz","obs_mz","ppm","intensity","p"]).to_csv(args.out_hits, index=False)
+        pd.DataFrame(columns=["step","smiles","q_value"]).to_csv(args.out_q, index=False)
+        print("[WARN] empty best path; wrote empty HRMS outputs")
+        return
+
+    peaks = pd.read_csv(args.features_csv)
+    if not {"mz","intensity"} <= set(peaks.columns):
+        raise ValueError("features_csv must have columns: mz,intensity")
+    peaks = peaks[["mz","intensity"]].dropna()
+    peaks = peaks[peaks["intensity"] >= args.min_intensity]
+    peaks = peaks.sort_values("mz").reset_index(drop=True)
+
+    names = [a.strip() for a in args.adducts.split(",") if a.strip()]
+    funcs = [(a, ADDUCTS[a]) for a in names if a in ADDUCTS]
+
+    # theoretical m/z table
+    rows = []
+    for step, smi in enumerate(smiles_list, start=1):
+        m = exact_mass(smi)
+        if math.isnan(m):
+            continue
+        for a, fn in funcs:
+            rows.append({"step": step, "smiles": smi, "adduct": a, "theo_mz": fn(m)})
+    theo = pd.DataFrame(rows)
+
+    hits = []
+    for r in theo.itertuples(index=False):
+        lo = r.theo_mz * (1 - args.ppm * 1e-6)
+        hi = r.theo_mz * (1 + args.ppm * 1e-6)
+        sub = peaks[(peaks.mz >= lo) & (peaks.mz <= hi)]
+        if sub.empty:
+            continue
+        sub = sub.assign(ppm=(sub.mz - r.theo_mz).abs() / r.theo_mz * 1e6)
+        k = sub.ppm.idxmin()
+        row = sub.loc[k]
+        p = float(min(1.0, row.ppm / args.ppm))
+        hits.append({
+            "step": int(r.step),
+            "smiles": r.smiles,
+            "adduct": r.adduct,
+            "theo_mz": float(r.theo_mz),
+            "obs_mz": float(row.mz),
+            "ppm": float(row.ppm),
+            "intensity": float(row.intensity),
+            "p": p
+        })
+
+    if hits:
+        hits_df = pd.DataFrame(hits).sort_values(["step","ppm"])
+    else:
+        hits_df = pd.DataFrame(columns=["step","smiles","adduct","theo_mz","obs_mz","ppm","intensity","p"])
+    hits_df.to_csv(args.out_hits, index=False)
+
+    if not hits_df.empty:
+        best = hits_df.groupby(["step","smiles"], as_index=False)["p"].min().rename(columns={"p":"p"})
+        q = benjamini_hochberg(best["p"].tolist())
+        best["q_value"] = q
+    else:
+        best = pd.DataFrame(columns=["step","smiles","q_value"])
+
+    best.to_csv(args.out_q, index=False)
+    print(f"[OK] wrote {args.out_hits} (n_hits={len(hits_df)}) and {args.out_q} (n_steps={len(best)})")
+
+if __name__ == "__main__":
+    main()

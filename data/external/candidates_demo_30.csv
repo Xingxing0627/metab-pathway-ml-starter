@@ -1,0 +1,31 @@
+product_smiles,name,rule_tag
+O=C(O)C,acetic acid,phaseI_oxidation
+CC=O,acetaldehyde,phaseI_oxidation
+CCO,ethanol,phaseI_reduction
+CC(=O)OC,ethyl acetate,phaseII_esterification
+CC(=O)Cl,acetyl chloride,phaseI_halogenation
+ClCC(=O)O,chloroacetic acid,phaseI_halogenation
+O=C(O)C(Cl)Cl,dichloroacetic acid,phaseI_halogenation
+O=C(O)C(Cl)(Cl)Cl,trichloroacetic acid,phaseI_halogenation
+O=CC(=O)O,glyoxylic acid,phaseI_oxidation
+O=C=O,carbon dioxide,byproduct
+O,water,byproduct
+c1ccccc1O,phenol,phaseI_hydroxylation
+Clc1ccccc1O,chlorophenol,phaseI_hydroxylation
+Oc1ccc(cc1)O,dihydroxybenzene,phaseI_hydroxylation
+O=C(O)c1ccccc1,benzoic acid,phaseI_oxidation
+O=Cc1ccccc1,benzaldehyde,phaseI_oxidation
+OCc1ccccc1,benzyl alcohol,phaseI_reduction
+COc1ccccc1,anisole,phaseII_methylation
+CC(=O)Oc1ccccc1,phenyl acetate,phaseII_esterification
+ClCC=O,chloroacetaldehyde,phaseI_halogenation
+ClCCO,chloroethanol,phaseI_halogenation
+OCC(=O)O,glycolic acid,phaseI_oxidation
+CC(O)C(=O)O,lactic acid,phaseI_oxidation
+CC(=O)C(=O)O,pyruvic acid,phaseI_oxidation
+O=CO,formic acid,phaseI_oxidation
+C=O,formaldehyde,phaseI_oxidation
+CC(=O)C,acetone,phaseI_oxidation
+CC(O)C,isopropanol,phaseI_reduction
+CC(=O)Nc1ccccc1,acetanilide,phaseII_acylation
+O=C(O)c1cc(O)ccc1,salicylic acid,phaseI_hydroxylation

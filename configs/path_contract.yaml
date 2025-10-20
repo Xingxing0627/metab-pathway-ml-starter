@@ -1,0 +1,15 @@
+# 多步路径搜索契约
+constraints:
+  element_balance: true
+  allow_escaping_elements: ["H2O", "CO2"]  # 逸散白名单
+search:
+  beam:
+    k0: 10
+    k_decay: 2   # 每一步减少的top-k
+    max_depth: 4
+    no_loop: true
+stopping:
+  min_logprob_gain: 0.01
+  budget:
+    max_nodes: 2000
+    max_time_s: 120

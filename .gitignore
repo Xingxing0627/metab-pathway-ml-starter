@@ -1,0 +1,23 @@
+# python
+__pycache__/
+*.pyc
+
+# environments / editors
+.venv/
+.env/
+.vscode/
+.idea/
+
+# data (keep configs, ignore raw/intermediate/large artifacts)
+data/interim/
+data/processed/
+data/public/
+data/hrms/*
+!data/hrms/README.md
+
+# models & caches
+*.joblib
+*.npz
+reports/metrics/*.png
+reports/metrics/*.json
+reports/metrics/*.csv

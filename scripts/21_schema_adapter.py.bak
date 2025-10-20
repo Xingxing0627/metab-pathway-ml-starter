@@ -1,0 +1,65 @@
+"""
+将原始行 → 模型输入张量：
+- 规范化分布特征（温度缩放 + 熵）
+- 编码 env_ph_bin/temp_c 等
+- 生成占位的分子特征（TODO: 使用RDKit/图神经网络）
+"""
+
+import argparse, yaml, json, ast, pandas as pd, numpy as np
+from pathlib import Path
+from rdkit import Chem
+from rdkit.Chem import AllChem
+from rdkit.DataStructs import ConvertToNumpyArray
+
+def load_prob(s):
+    if isinstance(s, str):
+        try: return ast.literal_eval(s)
+        except Exception: return None
+    return s
+
+def temp_scale_prob(p, T=1.5):
+    import math
+    eps=1e-12
+    p=[max(eps, min(1-eps, v)) for v in p]
+    logit=[math.log(v/(1-v)) for v in p]
+    scaled=[lv/T for lv in logit]
+    mx=max(scaled)
+    ex=[np.exp(v-mx) for v in scaled]
+    s=sum(ex)
+    return [float(v/s) for v in ex]
+
+def entropy(p):
+    eps=1e-12
+    p=np.clip(np.array(p, dtype=float), eps, 1-eps)
+    return float(-(p*np.log(p)).sum())
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--in_csv", required=True)
+    ap.add_argument("--out_npz", required=True)
+    ap.add_argument("--T", type=float, default=1.5)
+    args = ap.parse_args()
+
+    df = pd.read_csv(args.in_csv)
+    X_env = []
+    for _,row in df.iterrows():
+        p = load_prob(row.get("env_redox_prob"))
+        if p is None:
+            p = [1/3,1/3,1/3]
+        ps = temp_scale_prob(p, T=args.T)
+        ent = entropy(ps)
+        ph = row.get("env_ph_bin", 0)
+        temp_c = row.get("temp_c", 25.0)
+        X_env.append(ps + [ent, ph, temp_c])
+    X_env = np.array(X_env, dtype=float)
+
+    # 占位的分子指纹（真实实现请替换）
+    X_mol = np.random.RandomState(42).rand(len(df), 128).astype("float32")
+
+    y_occur = df.get("occur_label", pd.Series([0]*len(df))).values.astype("int32")
+
+    np.savez(args.out_npz, X_env=X_env, X_mol=X_mol, y_occur=y_occur)
+    print(f"[OK] wrote {args.out_npz} with X_env={X_env.shape}, X_mol={X_mol.shape}")
+
+if __name__ == "__main__":
+    main()

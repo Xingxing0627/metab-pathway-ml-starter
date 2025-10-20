@@ -1,0 +1,22 @@
+run_at_utc: 2025-10-20T13:21:51Z
+git_hash: no-git
+inputs:
+  events_csv: data/examples/minimal_events.csv
+  candidates_csv: data/external/candidates_demo_30.csv
+  peaks_csv: data/hrms/real_neg_std.csv
+input_md5:
+  events: 4276d7604f19cc76d1a33ab8d78e0093
+  candidates: 5a901656bcc4087eb5466b4c795d0b00
+  peaks: e75d830d5fb6dc4f763d0c4a2735eb7c
+params:
+  ppm: 20
+  adducts: "[M-H]-"
+  min_intensity: 0
+artifacts:
+  pathway_tree: data/processed/pathway_tree.json
+  report_md: reports/pathway_best.md
+  report_csv: reports/pathway_best.csv
+  theo_mz_csv: reports/pathway_theo_mz.csv
+  hrms_hits_csv: reports/metrics/hrms_hits.csv
+  hrms_qvalues_csv: reports/metrics/hrms_qvalues.csv
+  qcurve_png: reports/metrics/qcurve.png

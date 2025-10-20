@@ -1,0 +1,13 @@
+# 校准分层定义（写死在配置中，便于复现）
+ph_bins:
+  - [0,4)
+  - [4,7)
+  - [7,9)
+  - [9,14]
+redox_levels: [low, mid, high]
+temperature_c:
+  - [0,15)
+  - [15,30)
+  - [30,45]
+# 组合分层示例（可选）：['ph_bin','redox','temp_bin']
+strata_keys: ["ph_bin", "redox", "temp_bin"]
