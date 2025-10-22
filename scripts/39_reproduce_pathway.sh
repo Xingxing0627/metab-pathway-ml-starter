@@ -15,6 +15,7 @@ python scripts/34_render_path.py --tree data/processed/pathway_tree.json --candi
 python scripts/92_export_theo_mz.py --tree data/processed/pathway_tree.json --adducts "[M+H]+,[M+Na]+,[M+K]+,[M+NH4]+,[M-H]-" --out reports/pathway_theo_mz.csv
 python scripts/91_hrms_validate_ppm.py --tree data/processed/pathway_tree.json --features_csv "$PEAKS" --ppm "$PPM" --adducts "$ADDUCTS" --min_intensity "$MINI" --out_hits reports/metrics/hrms_hits.csv --out_q reports/metrics/hrms_qvalues.csv
 python scripts/93_plot_qcurve.py --q_csv reports/metrics/hrms_qvalues.csv --out_png reports/metrics/qcurve.png || true
+python scripts/98_strip_legacy_cols.py data/examples/minimal_events.csv
 python scripts/10_schema_contract_check.py --schema docs/schema_contract.yaml --example data/examples/minimal_events.csv --table metabolic_single_step --strict 1 || true
 GITHASH="$(git rev-parse --short HEAD 2>/dev/null || echo "no-git")"
 DATE="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
@@ -44,6 +45,7 @@ artifacts:
   hrms_hits_csv: reports/metrics/hrms_hits.csv
   hrms_qvalues_csv: reports/metrics/hrms_qvalues.csv
   qcurve_png: reports/metrics/qcurve.png
+python scripts/98_strip_legacy_cols.py data/examples/minimal_events.csv
 python scripts/10_schema_contract_check.py --schema docs/schema_contract.yaml --example data/examples/minimal_events.csv --table metabolic_single_step --strict 1 || true
 YAML
 
