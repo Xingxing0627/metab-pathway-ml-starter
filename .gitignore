@@ -21,3 +21,6 @@ data/hrms/*
 reports/metrics/*.png
 reports/metrics/*.json
 reports/metrics/*.csv
+
+!reports/metrics/hrms_fdr.csv
+!reports/metrics/fdr_curve.png
