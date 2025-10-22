@@ -1,0 +1,18 @@
+{
+  "env_matrix": ["water","sediment","soil","sludge","biofilm","WWTP_influent","effluent","porewater","other"],
+  "pH_bin": ["acidic","neutral","basic"],
+  "redox": ["aerobic","anoxic","anaerobic","unknown"],
+  "light": ["dark","daylight","UV","lab_light","unknown"],
+  "microbiome_type": ["activated_sludge","river_water","soil_microbiome","plant_microbiome","pure_strain","unknown"],
+  "fallbacks": {
+    "redox": "from_microbiome_type_prior"
+  },
+  "priors": {
+    "activated_sludge": {"redox_prob":{"aerobic":0.6,"anoxic":0.3,"anaerobic":0.1}},
+    "soil_microbiome": {"redox_prob":{"aerobic":0.5,"anoxic":0.3,"anaerobic":0.2}},
+    "unknown": {"redox_prob":{"unknown":1.0}}
+  },
+  "conflicts": [
+    {"if":{"light":"UV","biotic_flag":"enzyme_assisted"},"set":"env_conflict"}
+  ]
+}
