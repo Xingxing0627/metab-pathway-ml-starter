@@ -23,3 +23,8 @@ help:
 	@echo make pos|neg|bundle|check|data|lite|beam|hrms
 bundle: pos
 	python scripts/11_release_packager.py --out release_bundle.tar.gz
+
+
+.PHONY: bundle-all
+bundle-all: pos neg
+	python scripts/11_release_packager.py --out release_bundle.tar.gz
