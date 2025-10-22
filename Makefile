@@ -28,3 +28,9 @@ bundle: pos
 .PHONY: bundle-all
 bundle-all: pos neg
 	python scripts/11_release_packager.py --out release_bundle.tar.gz
+
+.PHONY: smoke
+smoke:
+	python scripts/10_schema_contract_check.py --schema docs/schema_contract.yaml --example data/examples/minimal_events.csv --table metabolic_single_step --strict 1
+	test -s reports/pathway_best.md
+	test -s release_bundle.tar.gz
