@@ -1,26 +1,6 @@
-[
-  {
-    "path": "reports/pathway_best.md",
-    "md5": "a0fc2107edba8df58522da79cd78a4f7"
-  },
-  {
-    "path": "reports/metrics/hrms_qvalues.csv",
-    "md5": "63a5724a475bf4ec2b460cb8bc50839a"
-  },
-  {
-    "path": "reports/metrics/hrms_fdr.csv",
-    "md5": "b886ad9cca6d1b3f4326ece857e630a9"
-  },
-  {
-    "path": "PROVENANCE.yml",
-    "md5": "2045fb595a53fed07e5f0c43f6cb04f6"
-  },
-  {
-    "path": "docs/run_recipe.yaml",
-    "md5": "995f2c137c16a4787653b38f7718f555"
-  },
-  {
-    "path": "docs/schema_contract.yaml",
-    "md5": "c8e135be08eea4a0b2e1b1499d19dd5b"
-  }
-]
+{
+  "commit": "1c90918",
+  "bundle": "release_bundle.tar.gz",
+  "md5": "b66987901fd8fa6992eec752ec2c5488",
+  "time": "2025-10-22T15:30:36.506689"
+}
