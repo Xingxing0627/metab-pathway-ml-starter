@@ -1,4 +1,4 @@
-.PHONY: setup check data lite beam hrms
+.PHONY: setup check data lite beam hrms pos neg bundle
 
 setup:
 	conda env create -f environment.yml || true
@@ -19,23 +19,14 @@ beam:
 hrms:
 	python scripts/90_hrms_validation.py --in data/processed/pathway_tree.json --out reports/metrics/hrms_fdr.csv
 
+.PHONY: pos neg bundle
+
+.PHONY: pos neg bundle
+
 pos:
 	PEAKS=data/hrms/synthetic_peaks.csv ADDUCTS='[M+H]+,[M+Na]+,[M+K]+,[M+NH4]+' PPM=10 MINI=800 ./scripts/39_reproduce_pathway.sh
 
 neg:
-	PEAKS=data/hrms/real_neg_std.csv ADDUCTS='[M-H]-' PPM=20 MINI=0 ./scripts/39_reproduce_pathway.sh
-
-bundle:
-	python scripts/11_release_packager.py --out release_bundle.tar.gz
-.PHONY: pos neg bundle
-
-.PHONY: pos neg bundle
-
-pos:
-PEAKS=data/hrms/synthetic_peaks.csv ADDUCTS='[M+H]+,[M+Na]+,[M+K]+,[M+NH4]+' PPM=10 MINI=800 ./scripts/39_reproduce_pathway.sh
-
-neg:
-PEAKS=data/hrms/real_neg_std.csv ADDUCTS='[M-H]-' PPM=20 MINI=0 ./scripts/39_reproduce_pathway.sh
-
-bundle:
-python scripts/11_release_packager.py --out release_bundle.tar.gz
+.PHONY: help
+help:
+	@echo make pos|neg|bundle|check|data|lite|beam|hrms
