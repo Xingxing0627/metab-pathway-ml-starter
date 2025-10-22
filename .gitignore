@@ -24,3 +24,7 @@ reports/metrics/*.csv
 
 !reports/metrics/hrms_fdr.csv
 !reports/metrics/fdr_curve.png
+
+# local backups
+*.bak
+*.bak_contract
