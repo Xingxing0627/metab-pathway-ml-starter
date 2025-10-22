@@ -1,17 +1,17 @@
-run_at_utc: 2025-10-20T13:21:51Z
-git_hash: no-git
+run_at_utc: 2025-10-20T13:35:32Z
+git_hash: 30d8247
 inputs:
   events_csv: data/examples/minimal_events.csv
-  candidates_csv: data/external/candidates_demo_30.csv
-  peaks_csv: data/hrms/real_neg_std.csv
+  candidates_csv: data/external/candidates_demo_60.csv
+  peaks_csv: data/hrms/synthetic_peaks.csv
 input_md5:
   events: 4276d7604f19cc76d1a33ab8d78e0093
-  candidates: 5a901656bcc4087eb5466b4c795d0b00
+  candidates: 48e7d3daaf0179c5ece5502451407849
   peaks: e75d830d5fb6dc4f763d0c4a2735eb7c
 params:
-  ppm: 20
-  adducts: "[M-H]-"
-  min_intensity: 0
+  ppm: 10
+  adducts: "[M+H]+,[M+Na]+,[M+K]+,[M+NH4]+"
+  min_intensity: 800
 artifacts:
   pathway_tree: data/processed/pathway_tree.json
   report_md: reports/pathway_best.md

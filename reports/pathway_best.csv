@@ -1,5 +1,5 @@
 step,product_smiles,name,rule_tag
-1,O=CC(=O)O,glyoxylic acid,phaseI_oxidation
-2,OCC(=O)O,glycolic acid,phaseI_oxidation
-3,C=O,formaldehyde,phaseI_oxidation
+1,OCC(=O)O,glycolic acid,phaseI_oxidation
+2,O=CC(=O)O,glyoxylic acid,phaseI_oxidation
+3,O=COC(=O)O,carbonic monoester,phaseII_esterification
 4,O=CO,formic acid,phaseI_oxidation
