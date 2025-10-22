@@ -1,0 +1,22 @@
+version: 0.1
+inputs:
+  events_csv: data/examples/minimal_events.csv
+  candidates_csv: data/external/candidates_demo_60.csv
+  peaks_csv: ${PEAKS:-data/hrms/synthetic_peaks.csv}
+params:
+  ppm: ${PPM:-10}
+  adducts: ${ADDUCTS:-[M+H]+,[M+Na]+,[M+K]+,[M+NH4]+}
+  min_intensity: ${MINI:-800}
+pipeline:
+  - scripts/04_context_env_fill.py
+  - scripts/21_schema_adapter.py
+  - scripts/80_train_lite.py
+  - scripts/33_beam_expand.py
+  - scripts/34_render_path.py
+  - scripts/92_export_theo_mz.py
+  - scripts/91_hrms_validate_ppm.py
+  - scripts/96_hrms_decoy_fdr.py
+artifacts:
+  - reports/pathway_best.md
+  - reports/metrics/hrms_qvalues.csv
+  - reports/metrics/hrms_fdr.csv

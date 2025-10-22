@@ -1,0 +1,31 @@
+version: 0.1
+tables:
+  metabolic_single_step:
+    columns:
+      substrate_smiles: {type: string, nullable: false}
+      enzyme:          {type: string, nullable: true}
+      env_matrix:      {type: string, enum: [water, sediment, soil, sludge, biofilm, WWTP_influent, effluent, porewater, other], nullable: true}
+      pH:              {type: float, nullable: true}
+      redox:           {type: string, enum: [aerobic, anoxic, anaerobic, unknown], nullable: true}
+      light:           {type: string, enum: [dark, daylight, UV, lab_light, unknown], nullable: true}
+      temp_C:          {type: float, nullable: true}
+      e_acceptor:      {type: string, nullable: true}
+      co_substrate:    {type: string, nullable: true}
+      microbiome_type: {type: string, nullable: true}
+      biotic_flag:     {type: string, enum: [enzyme_assisted, likely_biotic, abiotic], nullable: false}
+      species:         {type: string, nullable: true}
+      occur:           {type: integer, enum: [0,1], nullable: false}
+      p_occur:         {type: float, nullable: true, default: null}
+      reject_flag:     {type: integer, enum: [0,1], nullable: true, default: 0}
+      env_feasibility_prior: {type: float, range: [0.0,1.0], nullable: true}
+      redox_prob:      {type: json, nullable: true}
+      env_conflict:    {type: integer, enum: [0,1], nullable: true, default: 0}
+      main_product:    {type: string, nullable: true}
+      byproducts:      {type: string, nullable: true}
+      abiotic_like:    {type: integer, enum: [0,1], nullable: true, default: 0}
+      map_quality:     {type: string, enum: [A,B,C], nullable: true}
+      metadata_confidence: {type: string, enum: [A,B,C], nullable: true}
+policies:
+  fallback:
+    redox: use_redox_prior_from_microbiome_type
+    reject_flag: set_if_p_occur_below_threshold
