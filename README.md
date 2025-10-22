@@ -67,12 +67,3 @@ metab-pathway-ml-starter/
 
 > 之后逐步替换 Lite/Plus 模型与真实 HRMS 流程。
 
-## Reproduce
-```bash
-# positive mode + bundle
-make bundle
-
-# both positive & negative + bundle
-make bundle-all
-git add Makefile && git commit -m "Add smoke target (contract + artifacts)"
-]
