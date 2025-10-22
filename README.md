@@ -67,3 +67,5 @@ metab-pathway-ml-starter/
 
 > 之后逐步替换 Lite/Plus 模型与真实 HRMS 流程。
 
+
+![CI](https://github.com/Xingxing0627/metab-pathway-ml-starter/actions/workflows/ci.yml/badge.svg)
